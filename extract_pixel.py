@@ -1,14 +1,31 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+
+def get_header(height, width):
+    #Get header for csv
+    header = ''
+    loop = int(height) * int(width)
+    for i in range(loop):
+        header = header+','+str(i)
+    return header
+
+#Prepare csv
+global file_output
+file_output = open('data\\data.csv', 'w')
+file_output.write('label'+str(get_header(28, 28))+'\n')
 
 def get_image_size(image):
     #Get image width and height
     return image.shape
 
-def get_pixel_value(filename):
+def get_pixel_value(filepath, filename):
+    #Status
+    print ('Getting image pixels...',filepath)
+
     #Read the image
-    image = cv2.imread(filename)
+    image = cv2.imread(filepath)
 
     #Get image shape
     height, width, channels = get_image_size(image)
@@ -27,28 +44,27 @@ def get_pixel_value(filename):
             list_pixel_value.append(pixel_value)
 
     #Graph
-    array = np.array(list_pixel_value)
-    plt.imshow(array.reshape(28,28), cmap='gray')
-    plt.show()
+    #array = np.array(list_pixel_value)
+    #visualize(array, height, width)
 
     #Save to csv
-    write_csv('2', list_pixel_value, 'data\\data.csv', height, width)
+    write_csv('data\\data.csv', filename, list_pixel_value)
 
-def get_header(height, width):
-    #Get header for csv
-    header = ''
-    loop = int(height) * int(width)
-    for i in range(loop):
-        header = header+','+str(i)
-    return header
-
-def write_csv(label, list_value, filename, height, width):
+def write_csv(filename, label, list_value):
     #Join array
     join_item = ', '.join(str(value) for value in list_value)
-    #Write in csv format
-    file_output = open(filename, 'w')
-    file_output.write('label'+str(get_header(height, width))+'\n')
     file_output.write(label+','+join_item+'\n')
 
+def visualize(array, height, width):
+    plt.imshow(np.array(array.reshape(height, width)), cmap='gray')
+    plt.show()
+
 if __name__ == '__main__':
-    get_pixel_value('image/test-2.png')
+    dir = 'image\\'
+
+    try:
+        for item in os.listdir(dir):
+            get_pixel_value(dir+item, item)
+        print ('Done!')
+    except:
+        print ('Please check your images!')
