@@ -27,14 +27,23 @@ def get_pixel_value(filename):
             list_pixel_value.append(pixel_value)
 
     #Save to csv
-    write_csv('2', list_pixel_value, 'data\\data.csv')
+    write_csv('2', list_pixel_value, 'data\\data.csv', height, width)
 
-def write_csv(label, list_value, filename):
+def get_header(height, width):
+    #Get header for csv
+    header = ''
+    loop = int(height) * int(width)
+    for i in range(loop):
+        header = header+','+str(i)
+    return header
+
+def write_csv(label, list_value, filename, height, width):
     #Join array
     join_item = ', '.join(str(value) for value in list_value)
     #Write in csv format
     file_output = open(filename, 'w')
-    file_output.write(label+','+join_item)
+    file_output.write('label'+str(get_header(height, width))+'\n')
+    file_output.write(label+','+join_item+'\n')
 
 if __name__ == '__main__':
     get_pixel_value('image/test-2.png')
