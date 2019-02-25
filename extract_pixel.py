@@ -48,7 +48,7 @@ def get_pixel_value(filepath, filename):
     #visualize(array, height, width)
 
     #Save to csv
-    write_csv('data\\data.csv', filename, list_pixel_value)
+    write_csv('data\\data.csv', '-1', list_pixel_value)
 
 def write_csv(filename, label, list_value):
     #Join array
