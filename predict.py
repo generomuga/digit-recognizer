@@ -1,37 +1,48 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn import svm
+from sklearn import svm, metrics
+from sklearn.model_selection import train_test_split
 
 def classify_image(filename):
     #Load data
     data = pd.read_csv(filename).as_matrix()
 
-    #Get train label
-    train_label = data[0:1000, 0]
-    #Get train feature (pixels)
-    train_feature = data[0:1000, 1:]
+    nsample = len(data)
+    #print (nsample)
 
-    #Get test label
-    test_label = data[0:100, 0]
-    #Get test feature
-    test_feature = data[0:100, 1:]
+    #Get train label
+    label = data[0:10000, 0]
+    #Get train feature (pixels)
+    feature = data[0:10000, 1:]
+
+    X_train, X_test, y_train, y_test = train_test_split(feature, label, test_size=0.33, random_state=42)
+
+    #Show test to predict
+    #visualize(X_test[0], 28, 28)
 
     #Get to predict
     predict_label, predict_feature = read_to_predict('data\\data.csv')
 
     #Graph
-    visualize(predict_feature[0], 28, 28)
+    index_img = 2
+    visualize(predict_feature[index_img], 28, 28)
 
     #Set classifier
-    clf = svm.SVC(C=1.0, cache_size=600, kernel='linear', gamma=0.001, class_weight='balanced')
+    clf = svm.SVC(C=1.0, cache_size=600, kernel='linear', gamma=0.0001, class_weight='balanced')
+    #clf = svm.SVC(gamma=0.0001)
+
     #Fit data to model
-    clf.fit(train_feature, train_label)
+    #clf.fit(X_train, y_train)
+    clf.fit(feature, label)
+
     #predict
-    print ('Predicted digit: ', str(clf.predict([predict_feature[0]])))
+    #print ('Predicted digit: ', str(clf.predict([X_test[0]])))
+    print ('Predicted digit: ', str(clf.predict([predict_feature[index_img]])))
+
 
 def visualize(array, height, width):
-    plt.imshow(np.array(array.reshape(height, width)), cmap='gray')
+    plt.imshow(np.array(array.reshape(height, width)))
     plt.show()
 
 def read_to_predict(filename):
