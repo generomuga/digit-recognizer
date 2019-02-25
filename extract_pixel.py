@@ -26,6 +26,11 @@ def get_pixel_value(filename):
             pixel_value = gray_image[x,y]
             list_pixel_value.append(pixel_value)
 
+    #Graph
+    array = np.array(list_pixel_value)
+    plt.imshow(array.reshape(28,28), cmap='gray')
+    plt.show()
+
     #Save to csv
     write_csv('2', list_pixel_value, 'data\\data.csv', height, width)
 
