@@ -12,20 +12,17 @@ def classify_image(filename):
     #print (nsample)
 
     #Get train label
-    label = data[0:10000, 0]
+    label = data[0:2000, 0]
     #Get train feature (pixels)
-    feature = data[0:10000, 1:]
+    feature = data[0:2000, 1:]
 
     X_train, X_test, y_train, y_test = train_test_split(feature, label, test_size=0.33, random_state=42)
-
-    #Show test to predict
-    #visualize(X_test[0], 28, 28)
 
     #Get to predict
     predict_label, predict_feature = read_to_predict('data\\data.csv')
 
     #Graph
-    index_img = 2
+    index_img = 0
     visualize(predict_feature[index_img], 28, 28)
 
     #Set classifier
@@ -33,13 +30,11 @@ def classify_image(filename):
     #clf = svm.SVC(gamma=0.0001)
 
     #Fit data to model
-    #clf.fit(X_train, y_train)
-    clf.fit(feature, label)
+    clf.fit(X_train, y_train)
 
     #predict
-    #print ('Predicted digit: ', str(clf.predict([X_test[0]])))
     print ('Predicted digit: ', str(clf.predict([predict_feature[index_img]])))
-
+    print ('Accuracy', clf.score(X_test, y_test))
 
 def visualize(array, height, width):
     plt.imshow(np.array(array.reshape(height, width)))
