@@ -10,11 +10,12 @@ def convert_rgb2gray(filename):
     #Get train feature (pixels)
     feature = data[0:, 0:]
 
-    gray_image = np.array(feature[1]).reshape((28,28))
-    plt.imshow(gray_image, cmap='gray')
-    plt.show()
+    for i in range(0, 10):
+        gray_image = np.array(feature[i]).reshape((28,28))
+        #plt.imshow(gray_image, cmap='gray')
+        #plt.show()
 
-    cv2.imwrite('image\\t1.png', gray_image)
+        cv2.imwrite('image\\t'+str(i)+'.png', gray_image)
 
 if __name__ == '__main__':
     convert_rgb2gray('data\\test.csv')
